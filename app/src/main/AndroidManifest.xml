@@ -22,6 +22,11 @@
             android:name="MyWidgetProvider" >
             <intent-filter >
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.example.maro.proj5and.WIDGET_BUTTON_WWW" />
+                <action android:name="com.example.maro.proj5and.WIDGET_BUTTON_NEXT" />
+                <action android:name="com.example.maro.proj5and.WIDGET_BUTTON_PLAY" />
+                <action android:name="com.example.maro.proj5and.WIDGET_BUTTON_STOP" />
+                <action android:name="com.example.maro.proj5and.WIDGET_BUTTON_CHANGE_IMAGE" />
             </intent-filter>
 
             <meta-data

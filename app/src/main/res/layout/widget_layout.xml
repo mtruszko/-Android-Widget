@@ -9,10 +9,10 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/www"
+        android:id="@+id/btn_www"
         android:layout_width="124dp"
         android:layout_height="64dp"
-        android:layout_alignEnd="@+id/stop"
+        android:layout_alignEnd="@+id/btn_stop"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="center"
@@ -20,35 +20,35 @@
         android:text="www" />
 
     <Button
-        android:id="@+id/play"
+        android:id="@+id/btn_play"
         android:layout_width="wrap_content"
         android:layout_height="62dp"
-        android:layout_alignEnd="@+id/ivWidget"
-        android:layout_below="@+id/www"
+        android:layout_alignEnd="@+id/iv_Widget"
+        android:layout_below="@+id/btn_www"
         android:layout_gravity="center"
         android:layout_weight="1"
         android:text="Play/Pause" />
 
     <Button
-        android:id="@+id/next"
+        android:id="@+id/btn_next"
         android:layout_width="wrap_content"
         android:layout_height="67dp"
-        android:layout_alignBottom="@+id/play"
-        android:layout_below="@+id/www"
+        android:layout_alignBottom="@+id/btn_play"
+        android:layout_below="@+id/btn_www"
         android:layout_gravity="center"
-        android:layout_toEndOf="@+id/play"
+        android:layout_toEndOf="@+id/btn_play"
         android:layout_weight="1"
         android:text="Next" />
 
     <ImageView
-        android:id="@+id/ivWidget"
+        android:id="@+id/iv_Widget"
         android:layout_width="97dp"
         android:layout_height="68dp"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/play"
+        android:layout_below="@+id/btn_play"
         android:layout_gravity="center"
         android:layout_weight="1"
-        app:srcCompat="@android:drawable/btn_star" />
+        app:srcCompat="@drawable/ic_tukan" />
 
     <TextView
         android:id="@+id/update"
@@ -62,22 +62,22 @@
         android:text="Static Text"></TextView>
 
     <Button
-        android:id="@+id/stop"
+        android:id="@+id/btn_stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/next"
-        android:layout_alignTop="@+id/next"
-        android:layout_toEndOf="@+id/next"
+        android:layout_alignBottom="@+id/btn_next"
+        android:layout_alignTop="@+id/btn_next"
+        android:layout_toEndOf="@+id/btn_next"
         android:text="Stop" />
 
     <Button
-        android:id="@+id/changeImage"
+        android:id="@+id/btn_changeImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ivWidget"
-        android:layout_below="@+id/next"
-        android:layout_toEndOf="@+id/ivWidget"
-        android:layout_toStartOf="@+id/stop"
+        android:layout_alignBottom="@+id/iv_Widget"
+        android:layout_below="@+id/btn_next"
+        android:layout_toEndOf="@+id/iv_Widget"
+        android:layout_toStartOf="@+id/btn_stop"
         android:text="change" />
 
 </RelativeLayout>
