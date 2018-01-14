@@ -9,8 +9,14 @@ import android.appwidget.AppWidgetManager
 import android.widget.RemoteViews
 import android.content.ComponentName
 import android.appwidget.AppWidgetProvider
+import android.media.MediaPlayer
+import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import java.util.*
+import android.support.v4.content.ContextCompat.startActivity
+
+
 
 
 /**
@@ -55,22 +61,22 @@ class MyWidgetProvider : AppWidgetProvider() {
                     0, intentWBW, PendingIntent.FLAG_UPDATE_CURRENT)
 
             val intentWBN = Intent(context, MyWidgetProvider::class.java)
-            intentWBW.setAction(WIDGET_BUTTON_NEXT)
+            intentWBN.setAction(WIDGET_BUTTON_NEXT)
             val pendingIntentWBN = PendingIntent.getBroadcast(context,
                     0, intentWBN, PendingIntent.FLAG_UPDATE_CURRENT)
 
-            val intentWBP = Intent(context, MyWidgetProvider::class.java)
-            intentWBW.setAction(WIDGET_BUTTON_PLAY)
-            val pendingIntentWBP = PendingIntent.getBroadcast(context,
-                    0, intentWBP, PendingIntent.FLAG_UPDATE_CURRENT)
+            val intentWBP = Intent(context, BackgroundSoundService::class.java)
+//            intentWBP.setAction(WIDGET_BUTTON_PLAY)
+            val pendingIntentWBP = PendingIntent.getService(context,
+                    0, intentWBP, 0)
 
             val intentWBS = Intent(context, MyWidgetProvider::class.java)
-            intentWBW.setAction(WIDGET_BUTTON_STOP)
+            intentWBS.setAction(WIDGET_BUTTON_STOP)
             val pendingIntentWBS = PendingIntent.getBroadcast(context,
                     0, intentWBS, PendingIntent.FLAG_UPDATE_CURRENT)
 
             val intentWBC = Intent(context, MyWidgetProvider::class.java)
-            intentWBW.setAction(WIDGET_BUTTON_CHANGE_IMAGE)
+            intentWBC.setAction(WIDGET_BUTTON_CHANGE_IMAGE)
             val pendingIntentWBC = PendingIntent.getBroadcast(context,
                     0, intentWBC, PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -90,19 +96,36 @@ class MyWidgetProvider : AppWidgetProvider() {
         super.onReceive(context, intent)
 
         if (WIDGET_BUTTON_WWW.equals(intent!!.getAction())) {
-
+            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+            context!!.startActivity(browserIntent)
         }
         if (WIDGET_BUTTON_PLAY.equals(intent!!.getAction())) {
 
+            val svc = Intent(context, BackgroundSoundService::class.java)
+            context!!.startService(svc)
         }
         if (WIDGET_BUTTON_NEXT.equals(intent!!.getAction())) {
 
+
         }
         if (WIDGET_BUTTON_STOP.equals(intent!!.getAction())) {
-
+            val svc = Intent(context, BackgroundSoundService::class.java)
+            context!!.stopService(svc)
         }
         if (WIDGET_BUTTON_CHANGE_IMAGE.equals(intent!!.getAction())) {
-
+            val remoteViews = RemoteViews(context!!.getPackageName(),
+                    R.layout.widget_layout)
+            val id = context.getResources().getIdentifier("yourpackagename:drawable/ic_tukan.png", null, null)
+            remoteViews.setImageViewResource(R.id.iv_Widget, id)
+            pushWidgetUpdate(context!!.getApplicationContext(),
+                    remoteViews);
         }
     }
+}
+
+fun pushWidgetUpdate(context: Context, remoteViews: RemoteViews) {
+    val myWidget = ComponentName(context,
+            MyWidgetProvider::class.java)
+    val manager = AppWidgetManager.getInstance(context)
+    manager.updateAppWidget(myWidget, remoteViews)
 }

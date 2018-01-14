@@ -11,7 +11,7 @@
     <Button
         android:id="@+id/btn_www"
         android:layout_width="124dp"
-        android:layout_height="64dp"
+        android:layout_height="40dp"
         android:layout_alignEnd="@+id/btn_stop"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
@@ -22,8 +22,8 @@
     <Button
         android:id="@+id/btn_play"
         android:layout_width="wrap_content"
-        android:layout_height="62dp"
-        android:layout_alignEnd="@+id/iv_Widget"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/btn_www"
         android:layout_gravity="center"
         android:layout_weight="1"
@@ -44,10 +44,14 @@
         android:id="@+id/iv_Widget"
         android:layout_width="97dp"
         android:layout_height="68dp"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/btn_play"
         android:layout_gravity="center"
+        android:layout_toEndOf="@+id/update"
         android:layout_weight="1"
+        android:adjustViewBounds="true"
+        android:background="@color/colorAccent"
+        android:cropToPadding="true"
+        android:scaleType="centerCrop"
         app:srcCompat="@drawable/ic_tukan" />
 
     <TextView
@@ -74,10 +78,9 @@
         android:id="@+id/btn_changeImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/iv_Widget"
+        android:layout_alignEnd="@+id/btn_stop"
         android:layout_below="@+id/btn_next"
-        android:layout_toEndOf="@+id/iv_Widget"
-        android:layout_toStartOf="@+id/btn_stop"
+        android:layout_marginEnd="32dp"
         android:text="change" />
 
 </RelativeLayout>
