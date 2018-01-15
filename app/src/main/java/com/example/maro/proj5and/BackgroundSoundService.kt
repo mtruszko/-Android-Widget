@@ -1,15 +1,9 @@
 package com.example.maro.proj5and
 
-import android.annotation.SuppressLint
 import android.app.IntentService
-import android.app.Service
 import android.content.Intent
-import android.media.AudioManager
-import android.os.IBinder
 import android.media.MediaPlayer
-import android.media.audiofx.BassBoost
-import android.net.Uri
-import android.provider.Settings
+import android.os.IBinder
 
 
 /**
@@ -17,12 +11,20 @@ import android.provider.Settings
  */
 
 
-class BackgroundSoundService : IntentService("a"),MediaPlayer.OnPreparedListener,
-        MediaPlayer.OnCompletionListener {
-    override fun onHandleIntent(intent: Intent?) {
-        if (WIDGET_BUTTON_NEXT.equals(intent!!.getStringExtra(INTENT_MSG))) {
-            onPause()
+class BackgroundSoundService
+    : IntentService("a"),
+        MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnCompletionListener,
+        EventCallback {
+
+    override fun onEventReceived(event: Event) {
+        when(event) {
+            Event.NEXT -> player!!.pause()
         }
+    }
+
+    override fun onHandleIntent(intent: Intent?) {
+
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
@@ -33,7 +35,6 @@ class BackgroundSoundService : IntentService("a"),MediaPlayer.OnPreparedListener
     }
 
 
-
     var player: MediaPlayer? = null
     override fun onBind(arg0: Intent): IBinder? {
         return null
@@ -41,6 +42,7 @@ class BackgroundSoundService : IntentService("a"),MediaPlayer.OnPreparedListener
 
     override fun onCreate() {
         super.onCreate()
+        EventBus.register(this)
         player = MediaPlayer.create(this, R.raw.nocturne)
     }
 
@@ -49,19 +51,8 @@ class BackgroundSoundService : IntentService("a"),MediaPlayer.OnPreparedListener
         return START_STICKY
     }
 
-     fun onStop() {
-         player!!.stop()
-     }
-
-     fun onPause() {
-        player!!.pause()
-    }
-
-    fun next() {
-        player!!.pause()
-    }
-
     override fun onDestroy() {
+        EventBus.unregister(this)
         player!!.stop()
         player!!.release()
     }
