@@ -17,21 +17,20 @@ import android.provider.Settings
  */
 
 
-class BackgroundSoundService : IntentService() ,MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
+class BackgroundSoundService : IntentService("a"),MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener {
     override fun onHandleIntent(intent: Intent?) {
-
-        
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
     }
 
-    override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
-    }
 
     override fun onCompletion(mp: MediaPlayer?) {
     }
+
+
 
     var player: MediaPlayer? = null
     override fun onBind(arg0: Intent): IBinder? {
@@ -47,8 +46,6 @@ class BackgroundSoundService : IntentService() ,MediaPlayer.OnPreparedListener, 
         player!!.start()
         return START_STICKY
     }
-
-
 
      fun onStop() {
          player!!.stop()
