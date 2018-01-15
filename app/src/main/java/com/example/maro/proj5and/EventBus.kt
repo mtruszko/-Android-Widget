@@ -13,8 +13,10 @@ object EventBus {
 }
 
 enum class Event {
+    PLAY,
     PAUSE,
-    NEXT
+    NEXT,
+    STOP
 }
 
 interface EventCallback {

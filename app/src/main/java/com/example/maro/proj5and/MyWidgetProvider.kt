@@ -54,6 +54,20 @@ class MyWidgetProvider : AppWidgetProvider() {
                     .let { PendingIntent.getBroadcast(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT) }
                     .let { remoteViews.setOnClickPendingIntent(R.id.btn_www, it) }
 
+//            Intent(context, BackgroundSoundService::class.java)
+//                    .let { PendingIntent.getService(context, 0, it, 0) }
+//                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_play, it) }
+
+            Intent(context, MyWidgetProvider::class.java)
+                    .apply { action = WIDGET_BUTTON_PLAY }
+                    .let { PendingIntent.getBroadcast(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT) }
+                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_play, it) }
+
+            Intent(context, MyWidgetProvider::class.java)
+                    .apply { action = WIDGET_BUTTON_NEXT }
+                    .let { PendingIntent.getBroadcast(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT) }
+                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_next, it) }
+
             Intent(context, MyWidgetProvider::class.java)
                     .apply { action = WIDGET_BUTTON_STOP }
                     .let { PendingIntent.getBroadcast(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT) }
@@ -64,15 +78,6 @@ class MyWidgetProvider : AppWidgetProvider() {
                     .apply { putExtra(ID_EXTRA, widgetId) }
                     .let { PendingIntent.getBroadcast(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT) }
                     .let { remoteViews.setOnClickPendingIntent(R.id.btn_changeImage, it) }
-
-            Intent(context, BackgroundSoundService::class.java)
-                    .apply { putExtra(INTENT_MSG, WIDGET_BUTTON_NEXT) }
-                    .let { PendingIntent.getBroadcast(context, 0, it, 0) }
-                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_next, it) }
-
-            Intent(context, BackgroundSoundService::class.java)
-                    .let { PendingIntent.getService(context, 0, it, 0) }
-                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_play, it) }
 
             appWidgetManager.updateAppWidget(widgetId, remoteViews)
         }
@@ -89,15 +94,14 @@ class MyWidgetProvider : AppWidgetProvider() {
                         .let { context.startActivity(it) }
             }
             WIDGET_BUTTON_PLAY -> {
-                Intent(context, BackgroundSoundService::class.java)
-                        .let { context.startService(it) }
+                if(isServiceRunning) EventBus.send(Event.PLAY)
+                else Intent(context, BackgroundSoundService::class.java).let { context.startService(it) }
             }
             WIDGET_BUTTON_NEXT -> {
-
+                EventBus.send(Event.NEXT)
             }
             WIDGET_BUTTON_STOP -> {
-                Intent(context, BackgroundSoundService::class.java)
-                        .let { context.stopService(it) }
+                EventBus.send(Event.STOP)
             }
             WIDGET_BUTTON_CHANGE_IMAGE -> {
                 val id = intent.getIntExtra(ID_EXTRA, -1)
