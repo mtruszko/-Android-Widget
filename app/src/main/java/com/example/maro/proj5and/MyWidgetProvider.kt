@@ -39,9 +39,8 @@ class MyWidgetProvider : AppWidgetProvider() {
             // create some random data
             val number = Random().nextInt(100)
             val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
-            Log.w("WidgetExample", number.toString())
-            // Set the text
-            remoteViews.setTextViewText(R.id.update, number.toString())
+
+            remoteViews.setTextViewText(R.id.update, "")
 
             Intent(context, MyWidgetProvider::class.java)
                     .apply { action = AppWidgetManager.ACTION_APPWIDGET_UPDATE }
