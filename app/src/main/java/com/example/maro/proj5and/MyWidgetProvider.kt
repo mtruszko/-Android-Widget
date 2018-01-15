@@ -9,6 +9,7 @@ import android.appwidget.AppWidgetManager
 import android.widget.RemoteViews
 import android.content.ComponentName
 import android.appwidget.AppWidgetProvider
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.MediaPlayer
 import android.net.Uri
 import android.provider.MediaStore
@@ -95,9 +96,10 @@ class MyWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context?, intent: Intent?) {
         super.onReceive(context, intent)
 
-        if (WIDGET_BUTTON_WWW.equals(intent!!.getAction())) {
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
-            context!!.startActivity(browserIntent)
+        if (WIDGET_BUTTON_WWW == intent?.action) {
+            Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+                    .apply { flags = FLAG_ACTIVITY_NEW_TASK }
+                    .let { context?.startActivity(it) }
         }
         if (WIDGET_BUTTON_PLAY.equals(intent!!.getAction())) {
 
