@@ -30,6 +30,8 @@ var WIDGET_BUTTON_PLAY = "com.example.maro.proj5and.WIDGET_BUTTON_PLAY"
 var WIDGET_BUTTON_STOP = "com.example.maro.proj5and.WIDGET_BUTTON_STOP"
 var WIDGET_BUTTON_CHANGE_IMAGE = "com.example.maro.proj5and.WIDGET_BUTTON_CHANGE_IMAGE"
 
+var INTENT_MSG = "com.example.maro.proj5and.INTENT_MSG"
+
 
 class MyWidgetProvider : AppWidgetProvider() {
 
@@ -61,10 +63,10 @@ class MyWidgetProvider : AppWidgetProvider() {
             val pendingIntentWBW = PendingIntent.getBroadcast(context,
                     0, intentWBW, PendingIntent.FLAG_UPDATE_CURRENT)
 
-            val intentWBN = Intent(context, MyWidgetProvider::class.java)
-            intentWBN.setAction(WIDGET_BUTTON_NEXT)
+            val intentWBN = Intent(context, BackgroundSoundService::class.java)
+            intentWBN.putExtra(INTENT_MSG, WIDGET_BUTTON_NEXT)
             val pendingIntentWBN = PendingIntent.getBroadcast(context,
-                    0, intentWBN, PendingIntent.FLAG_UPDATE_CURRENT)
+                    0, intentWBN, 0)
 
             val intentWBP = Intent(context, BackgroundSoundService::class.java)
 //            intentWBP.setAction(WIDGET_BUTTON_PLAY)

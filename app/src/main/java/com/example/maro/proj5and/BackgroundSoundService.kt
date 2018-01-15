@@ -20,7 +20,9 @@ import android.provider.Settings
 class BackgroundSoundService : IntentService("a"),MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener {
     override fun onHandleIntent(intent: Intent?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (WIDGET_BUTTON_NEXT.equals(intent!!.getStringExtra(INTENT_MSG))) {
+            onPause()
+        }
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
@@ -56,7 +58,7 @@ class BackgroundSoundService : IntentService("a"),MediaPlayer.OnPreparedListener
     }
 
     fun next() {
-
+        player!!.pause()
     }
 
     override fun onDestroy() {
