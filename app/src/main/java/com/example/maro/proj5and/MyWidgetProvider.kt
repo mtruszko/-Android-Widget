@@ -95,34 +95,31 @@ class MyWidgetProvider : AppWidgetProvider() {
 
     }
 
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
-        if (WIDGET_BUTTON_WWW == intent?.action) {
-            Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
-                    .apply { flags = FLAG_ACTIVITY_NEW_TASK }
-                    .let { context?.startActivity(it) }
-        }
-        if (WIDGET_BUTTON_PLAY.equals(intent!!.getAction())) {
+        when(intent.action) {
+            WIDGET_BUTTON_WWW -> {
+                Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
+                        .apply { flags = FLAG_ACTIVITY_NEW_TASK }
+                        .let { context.startActivity(it) }
+            }
+            WIDGET_BUTTON_PLAY -> {
+                Intent(context, BackgroundSoundService::class.java)
+                        .let { context.startService(it) }
+            }
+            WIDGET_BUTTON_NEXT -> {
 
-            val svc = Intent(context, BackgroundSoundService::class.java)
-            context!!.startService(svc)
-        }
-        if (WIDGET_BUTTON_NEXT.equals(intent!!.getAction())) {
-
-
-        }
-        if (WIDGET_BUTTON_STOP.equals(intent!!.getAction())) {
-            val svc = Intent(context, BackgroundSoundService::class.java)
-            context!!.stopService(svc)
-        }
-        if (WIDGET_BUTTON_CHANGE_IMAGE.equals(intent!!.getAction())) {
-            val remoteViews = RemoteViews(context!!.getPackageName(),
-                    R.layout.widget_layout)
-            val id = context.getResources().getIdentifier("yourpackagename:drawable/ic_tukan.png", null, null)
-            remoteViews.setImageViewResource(R.id.iv_Widget, id)
-            pushWidgetUpdate(context!!.getApplicationContext(),
-                    remoteViews);
+            }
+            WIDGET_BUTTON_STOP -> {
+                Intent(context, BackgroundSoundService::class.java)
+                        .let { context.stopService(it) }
+            }
+            WIDGET_BUTTON_CHANGE_IMAGE -> {
+                val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
+                remoteViews.setImageViewResource(R.id.iv_Widget, R.drawable.ic_tukan)
+                pushWidgetUpdate(context.applicationContext, remoteViews)
+            }
         }
     }
 }
