@@ -1,23 +1,16 @@
 package com.example.maro.proj5and
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.provider.SyncStateContract.Helpers.update
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
-import android.widget.RemoteViews
-import android.content.ComponentName
 import android.appwidget.AppWidgetProvider
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
-import android.media.MediaPlayer
 import android.net.Uri
-import android.provider.MediaStore
 import android.util.Log
+import android.widget.RemoteViews
 import java.util.*
-import android.support.v4.content.ContextCompat.startActivity
-
-
 
 
 /**
@@ -31,64 +24,55 @@ var WIDGET_BUTTON_STOP = "com.example.maro.proj5and.WIDGET_BUTTON_STOP"
 var WIDGET_BUTTON_CHANGE_IMAGE = "com.example.maro.proj5and.WIDGET_BUTTON_CHANGE_IMAGE"
 
 var INTENT_MSG = "com.example.maro.proj5and.INTENT_MSG"
+val ID_EXTRA = "ID_EXTRA"
 
+val imageMap = mutableMapOf<Int, Int>()
 
 class MyWidgetProvider : AppWidgetProvider() {
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager,
-                          appWidgetIds: IntArray) {
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
 
         // Get all ids
-        val thisWidget = ComponentName(context,
-                MyWidgetProvider::class.java)
+        val thisWidget = ComponentName(context, MyWidgetProvider::class.java)
         val allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
         for (widgetId in allWidgetIds) {
             // create some random data
             val number = Random().nextInt(100)
-
-            val remoteViews = RemoteViews(context.packageName,
-                    R.layout.widget_layout)
+            val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
             Log.w("WidgetExample", number.toString())
             // Set the text
             remoteViews.setTextViewText(R.id.update, number.toString())
 
-            val intent = Intent(context, MyWidgetProvider::class.java)
-            intent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
-            val pendingIntent = PendingIntent.getBroadcast(context,
-                    0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            Intent(context, MyWidgetProvider::class.java)
+                    .apply { action = AppWidgetManager.ACTION_APPWIDGET_UPDATE }
+                    .apply { putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds) }
+                    .let { PendingIntent.getBroadcast(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT) }
+                    .let { remoteViews.setOnClickPendingIntent(R.id.update, it) }
 
-            val intentWBW = Intent(context, MyWidgetProvider::class.java)
-            intentWBW.setAction(WIDGET_BUTTON_WWW)
-            val pendingIntentWBW = PendingIntent.getBroadcast(context,
-                    0, intentWBW, PendingIntent.FLAG_UPDATE_CURRENT)
+            Intent(context, MyWidgetProvider::class.java)
+                    .apply { action = WIDGET_BUTTON_WWW }
+                    .let { PendingIntent.getBroadcast(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT) }
+                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_www, it) }
 
-            val intentWBN = Intent(context, BackgroundSoundService::class.java)
-            intentWBN.putExtra(INTENT_MSG, WIDGET_BUTTON_NEXT)
-            val pendingIntentWBN = PendingIntent.getBroadcast(context,
-                    0, intentWBN, 0)
+            Intent(context, MyWidgetProvider::class.java)
+                    .apply { action = WIDGET_BUTTON_STOP }
+                    .let { PendingIntent.getBroadcast(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT) }
+                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_stop, it) }
 
-            val intentWBP = Intent(context, BackgroundSoundService::class.java)
-//            intentWBP.setAction(WIDGET_BUTTON_PLAY)
-            val pendingIntentWBP = PendingIntent.getService(context,
-                    0, intentWBP, 0)
+            Intent(context, MyWidgetProvider::class.java)
+                    .apply { action = WIDGET_BUTTON_CHANGE_IMAGE }
+                    .apply { putExtra(ID_EXTRA, widgetId) }
+                    .let { PendingIntent.getBroadcast(context, 0, it, PendingIntent.FLAG_UPDATE_CURRENT) }
+                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_changeImage, it) }
 
-            val intentWBS = Intent(context, MyWidgetProvider::class.java)
-            intentWBS.setAction(WIDGET_BUTTON_STOP)
-            val pendingIntentWBS = PendingIntent.getBroadcast(context,
-                    0, intentWBS, PendingIntent.FLAG_UPDATE_CURRENT)
+            Intent(context, BackgroundSoundService::class.java)
+                    .apply { putExtra(INTENT_MSG, WIDGET_BUTTON_NEXT) }
+                    .let { PendingIntent.getBroadcast(context, 0, it, 0) }
+                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_next, it) }
 
-            val intentWBC = Intent(context, MyWidgetProvider::class.java)
-            intentWBC.setAction(WIDGET_BUTTON_CHANGE_IMAGE)
-            val pendingIntentWBC = PendingIntent.getBroadcast(context,
-                    0, intentWBC, PendingIntent.FLAG_UPDATE_CURRENT)
-
-            remoteViews.setOnClickPendingIntent(R.id.update, pendingIntent)
-            remoteViews.setOnClickPendingIntent(R.id.btn_www, pendingIntentWBW)
-            remoteViews.setOnClickPendingIntent(R.id.btn_play, pendingIntentWBP)
-            remoteViews.setOnClickPendingIntent(R.id.btn_next, pendingIntentWBN)
-            remoteViews.setOnClickPendingIntent(R.id.btn_stop, pendingIntentWBS)
-            remoteViews.setOnClickPendingIntent(R.id.btn_changeImage, pendingIntentWBC)
+            Intent(context, BackgroundSoundService::class.java)
+                    .let { PendingIntent.getService(context, 0, it, 0) }
+                    .let { remoteViews.setOnClickPendingIntent(R.id.btn_play, it) }
 
             appWidgetManager.updateAppWidget(widgetId, remoteViews)
         }
@@ -98,7 +82,7 @@ class MyWidgetProvider : AppWidgetProvider() {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
 
-        when(intent.action) {
+        when (intent.action) {
             WIDGET_BUTTON_WWW -> {
                 Intent(Intent.ACTION_VIEW, Uri.parse("http://www.google.com"))
                         .apply { flags = FLAG_ACTIVITY_NEW_TASK }
@@ -116,11 +100,21 @@ class MyWidgetProvider : AppWidgetProvider() {
                         .let { context.stopService(it) }
             }
             WIDGET_BUTTON_CHANGE_IMAGE -> {
-                val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
-                remoteViews.setImageViewResource(R.id.iv_Widget, R.drawable.ic_tukan)
-                pushWidgetUpdate(context.applicationContext, remoteViews)
+                val id = intent.getIntExtra(ID_EXTRA, -1)
+                when (imageMap[id]) {
+                    R.drawable.ic_tukan -> setImage(context, id, R.drawable.ic_weekend_black_24px)
+                    R.drawable.ic_weekend_black_24px -> setImage(context, id, R.drawable.ic_tukan)
+                    else -> setImage(context, id, R.drawable.ic_weekend_black_24px)
+                }
             }
         }
+    }
+
+    private fun setImage(context: Context, widgetId: Int, imageRes: Int) {
+        imageMap.put(widgetId, imageRes)
+        val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
+        remoteViews.setImageViewResource(R.id.iv_Widget, imageRes)
+        pushWidgetUpdate(context.applicationContext, remoteViews)
     }
 }
 
