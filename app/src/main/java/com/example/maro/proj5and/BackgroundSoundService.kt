@@ -1,6 +1,7 @@
 package com.example.maro.proj5and
 
 import android.annotation.SuppressLint
+import android.app.IntentService
 import android.app.Service
 import android.content.Intent
 import android.media.AudioManager
@@ -16,8 +17,13 @@ import android.provider.Settings
  */
 
 
-class BackgroundSoundService : Service() ,MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
+class BackgroundSoundService : IntentService() ,MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
+    override fun onHandleIntent(intent: Intent?) {
+
+        
+    }
+
     override fun onPrepared(mp: MediaPlayer?) {
     }
 
@@ -41,6 +47,8 @@ class BackgroundSoundService : Service() ,MediaPlayer.OnPreparedListener, MediaP
         player!!.start()
         return START_STICKY
     }
+
+
 
      fun onStop() {
          player!!.stop()
