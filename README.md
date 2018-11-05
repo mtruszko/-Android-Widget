@@ -1,3 +1,3 @@
-##Android Widget sample project
+## Android Widget sample project
 
 [Task](mini-projekt5.pdf)
